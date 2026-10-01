@@ -1,0 +1,35 @@
+local root = script:FindFirstChild("MM2TradeBot") or script.Parent:FindFirstChild("MM2TradeBot")
+
+if root then
+	local TradeBot = require(root.TradeBot)
+	local bot = TradeBot.new()
+	local UserInputService = game:GetService("UserInputService")
+	local Config = require(root.Config)
+	local botRunning = false
+
+	local function toggleBot()
+		if botRunning then
+			botRunning = false
+			bot:stop()
+		else
+			botRunning = true
+			task.spawn(function()
+				bot:start()
+			end)
+		end
+	end
+
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if gameProcessed then
+			return
+		end
+		if input.KeyCode == Config.toggleKey then
+			toggleBot()
+		end
+	end)
+
+	print("[MM2 Bot] Ready. Press Numpad 8 to toggle on.")
+	return
+end
+
+print("[MM2 Bot] MM2TradeBot folder not found. Create a folder named MM2TradeBot in ReplicatedStorage or under this script's parent and insert the Lua files before running.")

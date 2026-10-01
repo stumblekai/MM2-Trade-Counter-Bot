@@ -1,0 +1,235 @@
+local function normalizeKey(str)
+	if type(str) ~= "string" then
+		return ""
+	end
+
+	str = str:lower()
+	str = str:gsub("'", "")
+	str = str:gsub("%p", "")
+	str = str:gsub("%s+", " ")
+	str = str:gsub("^%s+", "")
+	str = str:gsub("%s+$", "")
+	return str
+end
+
+local function mergeTables(...)
+	local merged = {}
+	for i = 1, select("#", ...) do
+		local tbl = select(i, ...)
+		if type(tbl) == "table" then
+			for name, value in pairs(tbl) do
+				merged[normalizeKey(name)] = value
+			end
+		end
+	end
+	return merged
+end
+
+local godlyPrices = {
+	["Traveler's Gun"] = 5200,
+	["Evergun"] = 3450,
+	["Evergreen"] = 2625,
+	["Constellation"] = 2600,
+	["Alienbeam"] = 1950,
+	["Turkey"] = 1950,
+	["Vampire's Gun"] = 1900,
+	["Darkshot"] = 1800,
+	["Raygun"] = 1800,
+	["Darksword"] = 1775,
+	["Blossom"] = 1360,
+	["Sakura"] = 1350,
+	["Sunrise"] = 1075,
+	["Bauble"] = 675,
+	["Snowcannon"] = 675,
+	["Soul"] = 670,
+	["Spirit"] = 660,
+	["Sunset"] = 650,
+	["Rainbow Gun"] = 420,
+	["Flora"] = 410,
+	["Rainbow"] = 410,
+	["Xenoknife"] = 405,
+	["Xenoshot"] = 405,
+	["Bloom"] = 400,
+	["Heart Wand"] = 340,
+	["Blizzard"] = 305,
+	["Snowstorm"] = 305,
+	["Ocean"] = 275,
+	["Waves"] = 270,
+	["Flowerwood Gun"] = 250,
+	["Flowerwood"] = 245,
+	["Snow Dagger"] = 175,
+	["Watergun"] = 160,
+	["Icecream"] = 155,
+	["Treat"] = 155,
+	["Sweet"] = 150,
+	["Borealis"] = 145,
+	["Australis"] = 140,
+	["Bat"] = 125,
+	["Beachy"] = 90,
+	["Sands"] = 90,
+	["Pearlshine"] = 80,
+	["Candy"] = 80,
+	["Pearl"] = 75,
+	["Ornament"] = 70,
+	["Heartblade"] = 65,
+	["Phantom"] = 35,
+	["Red Luger"] = 35,
+	["Spectre"] = 35,
+	["Candleflame"] = 33,
+	["Darkbringer"] = 33,
+	["Elderwood Blade"] = 33,
+	["Elderwood Revolver"] = 33,
+	["Iceblaster"] = 33,
+	["Makeshift"] = 33,
+	["Lightbringer"] = 32,
+	["Sugar"] = 32,
+	["Green Luger"] = 23,
+	["Amerilaser"] = 22,
+	["Laser"] = 22,
+	["Hallowgun"] = 20,
+	["Nightblade"] = 20,
+	["Shark"] = 20,
+	["Icebeam"] = 18,
+	["Luger"] = 18,
+	["Plasmabeam"] = 18,
+	["Swirly Gun"] = 18,
+	["Battleaxe II"] = 17,
+	["Blaster"] = 17,
+	["Ginger Luger"] = 17,
+	["Pixel"] = 17,
+	["Gemstone"] = 15,
+	["Iceflake"] = 15,
+	["Old Glory"] = 15,
+	["Plasmablade"] = 15,
+	["Slasher"] = 15,
+	["Vampire's Edge"] = 15,
+	["Cookiecane"] = 13,
+	["Deathshard"] = 13,
+	["Eternalcane"] = 13,
+	["Gingerblade"] = 13,
+	["Jinglegun"] = 13,
+	["Lugercane"] = 13,
+	["Minty"] = 13,
+	["Nebula"] = 13,
+	["Virtual"] = 13,
+	["Battleaxe"] = 12,
+	["Gingermint"] = 12,
+	["Swirly Blade"] = 12,
+	["Chill"] = 10,
+	["Clockwork"] = 10,
+	["Fang"] = 10,
+	["Frostsaber"] = 10,
+	["Heat"] = 10,
+	["Spider"] = 10,
+	["Tides"] = 10,
+	["Bioblade"] = 8,
+	["Eternal III"] = 8,
+	["Eternal IV"] = 8,
+	["Hallow's Blade"] = 8,
+	["Hallow's Edge"] = 8,
+	["Handsaw"] = 8,
+	["Boneblade"] = 7,
+	["Eternal"] = 7,
+	["Eternal II"] = 7,
+	["Frostbite"] = 7,
+	["Ghostblade"] = 7,
+	["Ice Dragon"] = 7,
+	["Ice Shard"] = 7,
+	["Prismatic"] = 7,
+	["Pumpking"] = 7,
+	["Saw"] = 7,
+	["Xmas"] = 7,
+	["Eggblade"] = 5,
+	["Flames"] = 5,
+	["Snowflake"] = 5,
+	["Winter's Edge"] = 5,
+	["Peppermint"] = 4,
+	["Cookieblade"] = 3,
+	["Blue Seer"] = 3,
+	["Purple Seer"] = 3,
+	["Red Seer"] = 3,
+	["Seer"] = 3,
+	["Orange Seer"] = 2,
+	["Yellow Seer"] = 2,
+}
+
+local chromaPrices = {
+	["C. Traveler's Gun"] = 145000,
+	["Chroma Evergun"] = 56000,
+	["Chroma Evergreen"] = 42000,
+	["Chroma Bauble"] = 31000,
+	["C. Constellation"] = 29000,
+	["C. Vampire's Gun"] = 29000,
+	["Chroma Alienbeam"] = 24000,
+	["Chroma Raygun"] = 14250,
+	["Chroma Sunrise"] = 10750,
+	["Chroma Snowcannon"] = 7750,
+	["Chroma Sunset"] = 7750,
+	["Chroma Blizzard"] = 5500,
+	["Chroma Snowstorm"] = 4250,
+	["Chroma Heart Wand"] = 4000,
+	["Chroma Watergun"] = 2350,
+	["Chroma Snow Dagger"] = 2350,
+	["Chroma Ornament"] = 1825,
+	["Chroma Treat"] = 1775,
+	["Chroma Icecream"] = 1750,
+	["Chroma Sweet"] = 1725,
+	["Chroma Sands"] = 1200,
+	["Chroma Beachy"] = 1150,
+	["Chroma Darkbringer"] = 65,
+	["Chroma Lightbringer"] = 60,
+	["Chroma Luger"] = 50,
+	["Chroma Candleflame"] = 40,
+	["Chroma Laser"] = 40,
+	["C. Elderwood Blade"] = 37,
+	["Chroma Deathshard"] = 35,
+	["Chroma Swirly Gun"] = 35,
+	["Chroma Cookiecane"] = 32,
+	["Chroma Fang"] = 32,
+	["Chroma Gemstone"] = 32,
+	["Chroma Shark"] = 32,
+	["Chroma Slasher"] = 32,
+	["Chroma Heat"] = 28,
+	["Chroma Seer"] = 28,
+	["Chroma Gingerblade"] = 27,
+	["Chroma Tides"] = 27,
+	["Chroma Saw"] = 23,
+	["Chroma Boneblade"] = 22,
+}
+
+local ancientPrices = {
+	["Gingerscope"] = 15750,
+	["Traveler's Axe"] = 8000,
+	["Celestial"] = 2250,
+	["Vampire's Axe"] = 1600,
+	["Harvester"] = 250,
+	["Icepiercer"] = 160,
+	["Icebreaker"] = 65,
+	["Batwing"] = 42,
+	["Elderwood Scythe"] = 38,
+	["Swirly Axe"] = 38,
+	["Hallowscythe"] = 30,
+	["Logchopper"] = 18,
+	["Icewing"] = 13,
+}
+
+local uniquePrices = {
+	["Corrupt"] = 350,
+}
+
+local ITEM_PRICES = mergeTables(godlyPrices, chromaPrices, ancientPrices, uniquePrices)
+
+local BLACKLIST = {
+	[normalizeKey("Chroma Beachy")] = true,
+	[normalizeKey("Chroma Sands")] = true,
+	[normalizeKey("Chroma Heart Wand")] = true,
+	[normalizeKey("Flowerwood")] = true,
+	[normalizeKey("Flowerwood Gun")] = true,
+	[normalizeKey("Ornament")] = true,
+}
+
+return {
+	Prices = ITEM_PRICES,
+	Blacklist = BLACKLIST,
+	normalizeKey = normalizeKey,
+}
